@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ApiTest.Models;
+using Api.Data.Context;
+using Api.Business.Models;
 
 namespace ApiTest.Controllers
 {
@@ -13,44 +13,44 @@ namespace ApiTest.Controllers
     [ApiController]
     public class FornecedorController : ControllerBase
     {
-        private readonly ApiDbContext _context;
+        private readonly MyDbContext _context;
 
-        public FornecedorController(ApiDbContext context)
+        public FornecedorController(MyDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Fornecedor
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FornecedorModel>>> GetFornecedores()
+        public async Task<ActionResult<IEnumerable<Fornecedor>>> GetFornecedores()
         {
             return await _context.Fornecedores.ToListAsync();
         }
 
         // GET: api/Fornecedor/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<FornecedorModel>> GetFornecedorModel(Guid id)
+        public async Task<ActionResult<Fornecedor>> GetFornecedor(Guid id)
         {
-            var fornecedorModel = await _context.Fornecedores.FindAsync(id);
+            var fornecedor = await _context.Fornecedores.FindAsync(id);
 
-            if (fornecedorModel == null)
+            if (fornecedor == null)
             {
                 return NotFound();
             }
 
-            return fornecedorModel;
+            return fornecedor;
         }
 
         // PUT: api/Fornecedor/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFornecedorModel(Guid id, FornecedorModel fornecedorModel)
+        public async Task<IActionResult> PutFornecedor(Guid id, Fornecedor fornecedor)
         {
-            if (id != fornecedorModel.Id)
+            if (id != fornecedor.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(fornecedorModel).State = EntityState.Modified;
+            _context.Entry(fornecedor).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +58,7 @@ namespace ApiTest.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FornecedorModelExists(id))
+                if (!FornecedorExists(id))
                 {
                     return NotFound();
                 }
@@ -73,31 +73,31 @@ namespace ApiTest.Controllers
 
         // POST: api/Fornecedor
         [HttpPost]
-        public async Task<ActionResult<FornecedorModel>> PostFornecedorModel(FornecedorModel fornecedorModel)
+        public async Task<ActionResult<Fornecedor>> PostFornecedor(Fornecedor fornecedor)
         {
-            _context.Fornecedores.Add(fornecedorModel);
+            _context.Fornecedores.Add(fornecedor);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFornecedorModel", new { id = fornecedorModel.Id }, fornecedorModel);
+            return CreatedAtAction("GetFornecedor", new { id = fornecedor.Id }, fornecedor);
         }
 
         // DELETE: api/Fornecedor/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<FornecedorModel>> DeleteFornecedorModel(Guid id)
+        public async Task<ActionResult<Fornecedor>> DeleteFornecedor(Guid id)
         {
-            var fornecedorModel = await _context.Fornecedores.FindAsync(id);
-            if (fornecedorModel == null)
+            var fornecedor = await _context.Fornecedores.FindAsync(id);
+            if (fornecedor == null)
             {
                 return NotFound();
             }
 
-            _context.Fornecedores.Remove(fornecedorModel);
+            _context.Fornecedores.Remove(fornecedor);
             await _context.SaveChangesAsync();
 
-            return fornecedorModel;
+            return fornecedor;
         }
 
-        private bool FornecedorModelExists(Guid id)
+        private bool FornecedorExists(Guid id)
         {
             return _context.Fornecedores.Any(e => e.Id == id);
         }

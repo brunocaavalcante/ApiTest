@@ -1,4 +1,4 @@
-﻿using ApiTest.Models;
+﻿using Api.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +20,7 @@ namespace ApiTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApiDbContext>(options =>
+            services.AddDbContext<MyDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MyDb")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

@@ -12,6 +12,5 @@ namespace ApiTest.Models
         {
 
         }
-        public DbSet<FornecedorModel> Fornecedores { get; set; }
     }
 }
