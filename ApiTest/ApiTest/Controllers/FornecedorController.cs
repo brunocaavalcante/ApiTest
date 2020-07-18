@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Api.Data.Context;
 using Api.Business.Models;
+using ApiTest.ViewModels;
+using AutoMapper;
+using Api.Business.Interfaces;
 
 namespace ApiTest.Controllers
 {
@@ -14,17 +17,23 @@ namespace ApiTest.Controllers
     public class FornecedorController : ControllerBase
     {
         private readonly MyDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IFornecedorRepository _fornecedorRepository;
 
-        public FornecedorController(MyDbContext context)
+        public FornecedorController(MyDbContext context,
+                                    IMapper mapper,
+                                    IFornecedorRepository fornecedorRepository)
         {
             _context = context;
+            _mapper = mapper;
+            _fornecedorRepository = fornecedorRepository;
         }
 
-        // GET: api/Fornecedor
+        // GET: api/Fornecedores
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Fornecedor>>> GetFornecedores()
+        public async Task<IEnumerable<FornecedorViewModel>> GetFornecedores()
         {
-            return await _context.Fornecedores.ToListAsync();
+            return _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
         }
 
         // GET: api/Fornecedor/5

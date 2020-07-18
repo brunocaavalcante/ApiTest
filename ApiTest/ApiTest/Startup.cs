@@ -26,6 +26,7 @@ namespace ApiTest
             options.UseSqlServer(Configuration.GetConnectionString("MyDb")));
 
             services.AddAutoMapper(typeof(Startup));
+            services.ResolveDependency();
             services.WebApiConfig();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
