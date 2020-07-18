@@ -1,4 +1,5 @@
 ﻿using Api.Data.Context;
+using ApiTest.Configuration;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,7 @@ namespace ApiTest
             options.UseSqlServer(Configuration.GetConnectionString("MyDb")));
 
             services.AddAutoMapper(typeof(Startup));
-
+            services.WebApiConfig();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
