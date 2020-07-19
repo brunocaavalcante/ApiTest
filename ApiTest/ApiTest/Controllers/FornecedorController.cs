@@ -37,17 +37,15 @@ namespace ApiTest.Controllers
         }
 
         // GET: api/Fornecedor/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Fornecedor>> GetFornecedor(Guid id)
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<FornecedorViewModel>> GetFornecedor(Guid id)
         {
-            var fornecedor = await _context.Fornecedores.FindAsync(id);
+            var fornecedorViewModel = await ObterFornecedorProdutosEndereco(id);
 
-            if (fornecedor == null)
-            {
+            if (fornecedorViewModel == null)
                 return NotFound();
-            }
 
-            return fornecedor;
+            return Ok(fornecedorViewModel);
         }
 
         // PUT: api/Fornecedor/5
@@ -84,6 +82,8 @@ namespace ApiTest.Controllers
         [HttpPost]
         public async Task<ActionResult<Fornecedor>> PostFornecedor(Fornecedor fornecedor)
         {
+            if (!ModelState.IsValid) return BadRequest();
+
             _context.Fornecedores.Add(fornecedor);
             await _context.SaveChangesAsync();
 
@@ -109,6 +109,11 @@ namespace ApiTest.Controllers
         private bool FornecedorExists(Guid id)
         {
             return _context.Fornecedores.Any(e => e.Id == id);
+        }
+
+        private async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid id)
+        {
+            return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
         }
     }
 }
